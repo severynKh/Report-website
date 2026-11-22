@@ -1,0 +1,23 @@
+---
+title: "Standard Lyndon loop words: weighted orders"
+description: "S. Khomych, N. Korniichuk, K. Molokanov, A. Tsymbaliuk · International Mathematics Research Notices 2025(5), 1–32"
+image: thumb.png
+order: 1
+image-alt: "The 41 Lyndon words over the alphabet {1, 2} of length at most 7"
+---
+
+::: {.hero}
+[]{.hero-pic style="-webkit-mask-image:url(banner.png);mask-image:url(banner.png)"}
+:::
+
+## Abstract
+
+We generalize the study of standard Lyndon loop words from [A. Negut, A. Tsymbaliuk, "Quantum loop groups and shuffle algebras via Lyndon words", Adv. Math. 439 (2024), Paper No. 109482] to a more general class of orders on the underlying alphabet, as suggested in Remark 3.15 of loc.cit. The main new ingredient is the exponent-tightness of these words, which also allows to generalize the construction of PBW bases of the untwisted quantum loop algebra via the combinatorics of loop words.
+
+*Abstract as on arXiv:2407.19939.*
+
+[doi:10.1093/imrn/rnaf030](https://doi.org/10.1093/imrn/rnaf030) · [arXiv:2407.19939](https://arxiv.org/abs/2407.19939)
+
+MIT PRIMES, mentored by Prof. Alexander Tsymbaliuk (Purdue University).
+
+Picture: the 41 Lyndon words over {1, 2} of length at most 7, in lexicographic order.

@@ -4,10 +4,13 @@ project:
   render:
     - "*.qmd"
     - "research/**/*.qmd"
+    - "papers/**/*.qmd"
   resources:
     - "research/*/thumb.png"
     - "research/*/banner.png"
     - "research/*/banner-over.png"
+    - "papers/*/thumb.png"
+    - "papers/*/banner.png"
 
 website:
   title: "Reports"
@@ -16,18 +19,9 @@ website:
   search: false
   # Top bar. It slides away when scrolling down and returns when scrolling up.
   navbar:
-    title: false
+    title: "Severyn Khomych"
     pinned: false
     collapse: false
-    left:
-      - text: Me
-        href: about.qmd
-      - text: Reports
-        href: research/index.qmd
-      - text: Page
-        href:  index.qmd
-      - text: Blogs
-        href: blog.qmd
   page-footer:
     center: "Criticism and advice is what this website was built for: [open an issue on GitHub](https://github.com/severynKh/Report-website/issues/new)."
 

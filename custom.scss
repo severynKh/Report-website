@@ -253,8 +253,6 @@ $wide: calc(100vw - 2.5rem);
 }
 
 .banner-list {
-  @include break-out;
-  transform: translateX(-50%);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.25rem;
@@ -265,8 +263,7 @@ $wide: calc(100vw - 2.5rem);
   grid-column: span 2;
   position: relative;
   display: block;
-  height: calc(100vh - 3rem);
-  min-height: 320px;
+  height: 320px;
   overflow: hidden;
   border-radius: 18px;
   background-color: color-mix(in srgb, var(--accent) 10%, var(--bg));
@@ -337,7 +334,7 @@ $wide: calc(100vw - 2.5rem);
 // Half-width banner: two of them in a row, with the gap between.
 .banner-half {
   grid-column: span 1;
-  height: 62vh;
+  height: 240px;
 
   .banner-title {
     font-size: clamp(1.25rem, 2.2vw, 1.9rem);
@@ -450,4 +447,110 @@ html::-webkit-scrollbar {
 // Quarto puts the class on the wrapping <section>, so only centre its heading.
 section.heading-center > :is(h1, h2, h3, h4, h5, h6) {
   text-align: center;
+}
+
+// ---------------------------------------------------------------------------
+// Home page: one page, the CV on the left and the project and paper banners on the right.
+main.content:has(.onepage) {
+  // The site grid makes the page column only as wide as the text; the home page spans the window.
+  grid-column: screen-start / screen-end !important;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+.onepage {
+  display: grid;
+  grid-template-columns: minmax(18rem, 1fr) 2fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.onepage-about {
+  position: sticky;
+  top: 4rem;
+  font-size: 0.92rem;
+
+  .cv-name {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  h3 {
+    margin-top: 2rem;
+    font-size: 1.05rem;
+  }
+
+  p {
+    margin-bottom: 0.8rem;
+  }
+}
+
+.onepage-projects {
+  h2 {
+    margin-top: 0;
+  }
+
+  h2 ~ h2 {
+    margin-top: 3rem;
+  }
+
+  .banner-list {
+    margin-top: 1rem;
+  }
+}
+
+// Narrow screens: the CV above the banners.
+@media (max-width: 900px) {
+  .onepage {
+    grid-template-columns: 1fr;
+  }
+
+  .onepage-about {
+    position: static;
+  }
+}
+
+// Paper banners: the drawing sits at the right, the title keeps the left side to itself.
+.banner[href*="papers/"] {
+  .banner-pic {
+    -webkit-mask-size: auto 82%;
+    mask-size: auto 82%;
+    -webkit-mask-position: right 1.5rem center;
+    mask-position: right 1.5rem center;
+  }
+
+  .banner-text {
+    max-width: 55%;
+  }
+
+  &::after {
+    display: none;
+  }
+}
+
+// Paper titles are long: smaller type in the half-width paper banners.
+.banner-half[href*="papers/"] {
+  .banner-pic {
+    -webkit-mask-size: auto 62%;
+    mask-size: auto 62%;
+    -webkit-mask-position: right 1rem center;
+    mask-position: right 1rem center;
+  }
+
+  .banner-text {
+    max-width: 58%;
+    padding: 1.25rem;
+  }
+
+  .banner-title {
+    font-size: 1.15rem;
+  }
+
+  .banner-desc {
+    font-size: 0.8rem;
+  }
 }

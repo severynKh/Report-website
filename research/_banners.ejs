@@ -8,8 +8,8 @@
 <% for (const item of ordered) { %>
 <%
   // Quarto rewrites href attributes for the published address but not URLs inside style,
-  // so the picture path is made relative to this page here.
-  const banner = item.image ? item.image.replace(/^\/research\//, '').replace('thumb.png', 'banner.png') : null;
+  // so the picture path is made relative to this page (the site root) here.
+  const banner = item.image ? item.image.replace(/^\//, '').replace('thumb.png', 'banner.png') : null;
 %>
   <a class="banner<%= banner ? '' : ' banner-plain' %><%= item.half ? ' banner-half' : '' %>" href="<%- item.path %>">
     <% if (banner) { %>

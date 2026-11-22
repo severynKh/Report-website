@@ -1,9 +1,68 @@
 ---
-title: "S. Khomych Page"
+pagetitle: "Severyn Khomych"
+page-layout: full
+listing:
+  - id: projects
+    contents: "research/*/index.qmd"
+    template: research/_banners.ejs
+    fields: [title, description, image, overlay, order, half]
+  - id: papers
+    contents: "papers/*/index.qmd"
+    template: research/_banners.ejs
+    fields: [title, description, image, overlay, order, half]
 ---
 
+:::::: {.onepage}
 
+::::: {.onepage-about}
 
-[What is he doing?](research/index.qmd)
-[Who is it?](about.qmd)
-[What is he yapping?](blog.qmd)
+[Severyn Khomych]{.cv-name}
+
+### Education
+
+**University of Vienna**, 2024 – 2027 (expected)\
+BSc Mathematics. Bachelor's thesis: *Observation and Control of Agent and Density Models*, supervised by Prof. Angelika Manhart.
+
+**The University of Hong Kong**, 2026 – 2027\
+Exchange year, Department of Mathematics.
+
+### Research
+
+**MIT PRIMES**, Oct 2023 – Aug 2024\
+Lie theory and quantum groups, mentored by Prof. Alexander Tsymbaliuk (Purdue University). Paper [1].
+
+**MIT Yulia's Dream**, Jun 2022 – Jun 2023\
+Algebraic combinatorics, research group led by Prof. Darij Grinberg (Drexel University). Preprints [2], [3].
+
+### Papers
+
+[1] S. Khomych, N. Korniichuk, K. Molokanov, A. Tsymbaliuk. Standard Lyndon loop words: weighted orders. *International Mathematics Research Notices* 2025(5), 1–32. [doi:10.1093/imrn/rnaf030](https://doi.org/10.1093/imrn/rnaf030)
+
+[2] D. Grinberg, N. Korniichuk, K. Molokanov, S. Khomych. The diagonal derivative of a skew Schur polynomial. Preprint, 2024. [arXiv:2402.14217](https://arxiv.org/abs/2402.14217)
+
+[3] D. Grinberg, N. Korniichuk, K. Molokanov, S. Khomych. The Pak–Postnikov and Naruse skew hook length formulas: a new proof. Preprint, 2023. [arXiv:2310.18275](https://arxiv.org/abs/2310.18275)
+
+### Scholarship and teaching
+
+**IV-MINT Scholarship for High Potentials**, Federation of Austrian Industries, 2025
+
+**Arduino and Microelectronics Workshop**, 2025\
+Organiser, with the Federation of Austrian Industries, the University of Vienna and Aerospace Team Graz. A hands-on microcontroller course; each participant built a hardware project programmed in C++.
+
+:::::
+
+::::: {.onepage-projects}
+
+## Papers
+
+::: {#papers}
+:::
+
+## Projects
+
+::: {#projects}
+:::
+
+:::::
+
+::::::

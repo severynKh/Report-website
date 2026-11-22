@@ -1,0 +1,24 @@
+---
+title: "The diagonal derivative of a skew Schur polynomial"
+description: "D. Grinberg, N. Korniichuk, K. Molokanov, S. Khomych · Preprint, 2024"
+image: thumb.png
+order: 3
+half: true
+image-alt: "A semistandard skew Young tableau with its main diagonal shaded"
+---
+
+::: {.hero}
+[]{.hero-pic style="-webkit-mask-image:url(banner.png);mask-image:url(banner.png)"}
+:::
+
+## Abstract
+
+We prove a formula for the image of a skew Schur polynomial $s_{\lambda/\mu}(x_1, x_2, \ldots, x_N)$ under the differential operator $\nabla := \frac{\partial}{\partial x_1} + \frac{\partial}{\partial x_2} + \cdots + \frac{\partial}{\partial x_N}$. This generalizes a formula of Weigandt for $\nabla(s_\lambda)$.
+
+*Abstract as on arXiv:2402.14217.*
+
+[arXiv:2402.14217](https://arxiv.org/abs/2402.14217)
+
+MIT Yulia's Dream, research group led by Prof. Darij Grinberg (Drexel University).
+
+Picture: a semistandard tableau of the skew shape (7, 6, 4, 4, 2) / (3, 1, 1), main diagonal shaded.

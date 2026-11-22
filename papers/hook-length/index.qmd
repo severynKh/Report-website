@@ -1,0 +1,24 @@
+---
+title: "The Pak–Postnikov and Naruse skew hook length formulas: a new proof"
+description: "D. Grinberg, N. Korniichuk, K. Molokanov, S. Khomych · Preprint, 2023"
+image: thumb.png
+order: 2
+half: true
+image-alt: "A skew Young diagram with the hook length written in each cell"
+---
+
+::: {.hero}
+[]{.hero-pic style="-webkit-mask-image:url(banner.png);mask-image:url(banner.png)"}
+:::
+
+## Abstract
+
+The classical hook length formula of enumerative combinatorics expresses the number of standard Young tableaux of a given partition shape as a single fraction. In recent years, two generalizations of this formula have emerged: one by Pak and Postnikov, replacing the number by a (rational) generating function, and one by Naruse, which generalizes the setting from a partition to a skew partition. Both generalizations appear to lie significantly deeper, with no simple proofs known. We combine them into a generating-function identity for skew partitions, and prove it in a fairly elementary way using recursion, determinants and simple combinatorics.
+
+*Abstract as on arXiv:2310.18275.*
+
+[arXiv:2310.18275](https://arxiv.org/abs/2310.18275)
+
+MIT Yulia's Dream, research group led by Prof. Darij Grinberg (Drexel University).
+
+Picture: the skew shape (7, 6, 4, 4, 2) / (3, 1, 1), each cell showing its hook length in the outer shape.
