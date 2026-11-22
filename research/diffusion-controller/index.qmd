@@ -1,6 +1,6 @@
 ---
 title: "Diffusion Controller"
-description: "Description not written yet."
+description: "A learned denoiser that finds the start of a Gray-Scott pattern"
 image: thumb.png
 order: 3
 half: true
@@ -13,6 +13,88 @@ nocite: |
 []{.hero-pic style="-webkit-mask-image:url(banner.png);mask-image:url(banner.png)"}
 :::
 
+The Diffusion Controller looks for the initial condition that grows into a chosen Gray-Scott pattern.
+It follows DiffusionPDE [@huang2024diffusionpde]: a U-Net denoiser [@karras2022elucidating] learns what consistent pairs of early and late states look like, and a search starting from pure noise is steered towards the target late state while the denoiser keeps the pair physically plausible.
+The result is judged by the re-simulation error: the distance between the target and the state obtained by running the solver forward from the recovered start.
+Results and pictures are on [Pattern Forcing](../gray-scott-inversion/index.qmd); this page records how the model was built and where it fails.
+
+## How the data were simulated
+
+The Gray-Scott model has an activator u and a substrate v.
+Training scenes were simulated on a square with no-flux boundaries, on grids of 16, 32 and 64 cells, with a spacing of 2 length units.
+Diffusion is solved exactly in a cosine basis and the reaction by an explicit step, with time step 1.218.
+
+Each scene starts from a random field: u is half of the positive part of a Gaussian random field, and v is 1 everywhere.
+The full state (u, v) is stored at steps 50 and 100; step 0 is never shown to the model.
+A scene is kept only if it is finite and still patterned at the end.
+
+| Grid | Scenes drawn | Kept | Used for training |
+|---|---|---|---|
+| 16 × 16 | 500 | 410 | 369 |
+| 32 × 32 | 2000 | 1973 | 1923 |
+| 64 × 64 | 2000 | 2000 | 1950 |
+
+## Why these parameters
+
+| Quantity | Value | Reason |
+|---|---|---|
+| Feed a, kill b | 0.02842, 0.05368 | Kept from the earlier project this one grew from; the point lies just above the fold below which no pattern survives (a > 4(a+b)², ratio 1.054) |
+| Diffusivity of u, v | 0.3, 1.0 | The activator must diffuse more slowly than the substrate |
+| Grid spacing | 2 | A spacing of 4 pinned strokes to the grid axes; 2 matches a much finer reference within about 10% |
+| Time step | 1.218 | Set for accuracy, dt·(a+b) ≤ 0.1; the diffusion step is stable at any size |
+
+A later screen of the (a, b) plane confirmed how narrow the patterned region is: patterns survive only for a in 0.030–0.057 and b in 0.054–0.062.
+
+## Which U-Nets
+
+The default denoiser is the DDPM++ U-Net with EDM noise conditioning, 1.7 million parameters.
+Three other U-Net designs were trained at matched size on the 16 × 16 data and scored on the same 20 held-out scenes.
+
+| Denoiser | Median re-simulation error |
+|---|---|
+| UNet++ | 0.085 |
+| DDPM++ (default) | 0.095 |
+| Attention U-Net | 0.097 |
+| U²-Net | 0.104 |
+
+The differences between designs are smaller than the differences between scenes (interquartile range ±0.03–0.06), so the choice of U-Net matters little.
+U²-Net beat the default on the long-horizon task below and became the reference there.
+
+## Where it fails: starts of settled patterns
+
+The method works while the pattern is still forming.
+Asked to go from a settled pattern back to its start, it fails, and more data does not help.
+
+| Window | Training scenes | Re-simulation error |
+|---|---|---|
+| step 50 → 100 (default) | 369 | 0.080 |
+| step 50 → 150 | 238 | 0.428 |
+| step 50 → 200, 16 × 16 | about 9,500 | 0.492 |
+| step 50 → 200, 32 × 32 | about 9,500 | 0.818 |
+
+The reason is that settled patterns forget where they came from.
+A single blob reaches its steady state by about step 300–400, and from then on the state stops changing.
+On the step 50 → 300 task, the different starts that all reproduce the data are as far from each other (0.251) as from the true start (0.263).
+Taking the best of 8 draws and polishing it fixes the future, a re-simulation error of 0.009, but not the past: the recovered start stays wrong.
+
+## Physics search: simpler starts without learning
+
+Physics search drops the network.
+It writes the start as a few primitives, a blob (centre, width, strength: 4 numbers) or a line (two ends, width, strength: 6 numbers), and fits them by gradient descent through the solver [@kingma2015adam; @ledimet1986variational].
+Primitives are added one at a time where the misfit is largest [@mallat1993matching; @denoyelle2020sliding].
+Simplicity is counted as the fewest numbers needed to redraw a start.
+
+On 20 held-out 16 × 16 scenes the true starts need a median of 24 numbers.
+
+| Search | Numbers in the start | Re-simulation error | Simpler than the true start, and error ≤ 0.1 |
+|---|---|---|---|
+| Blobs | 8 | 0.094 | 12 of 20 |
+| Lines | 12 | 0.082 | 10 of 20 |
+| Blobs and lines | 9 | 0.068 | 14 of 20 |
+| Diffusion Controller, best of 8, pixel by pixel | 512 | 0.009 | 5 of 20 |
+
+Physics search therefore trades accuracy for starts that are two to three times simpler than the true ones.
+It was tested only on scenes made by the simulator with uniform coefficients, and it scales badly: the blob-and-line search reaches 0.220 on 32 × 32 and 0.520 on 64 × 64, against 0.015 and 0.066 for the Diffusion Controller.
 
 ## Background reading
 

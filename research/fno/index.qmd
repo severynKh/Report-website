@@ -1,6 +1,6 @@
 ---
 title: "FNO"
-description: "Description not written yet."
+description: "In progress: a one-pass inverse for pattern-forming systems"
 image: thumb.png
 order: 2
 half: true
@@ -13,6 +13,15 @@ nocite: |
 []{.hero-pic style="-webkit-mask-image:url(banner.png);mask-image:url(banner.png)"}
 :::
 
+::: {.callout-note appearance="minimal"}
+**In progress.** This page states the goal; no results are reported here yet.
+:::
+
+A Fourier Neural Operator (FNO) is a network that learns a map between whole fields, such as an initial condition and the pattern it grows into, by mixing information in the frequency domain [@li2021fourier].
+
+The goal is an inverse that needs a single forward pass: given a target pattern, return the initial condition or the parameter fields that produce it.
+The [Diffusion Controller](../diffusion-controller/index.qmd) reaches the same answer only after many denoising passes, so a one-pass operator would make inverse design far cheaper.
+The intended systems are the Gray-Scott reaction–diffusion model, see [Pattern Forcing](../gray-scott-inversion/index.qmd), and a surrogate of liquid metal dealloying, whose final fields are shown in the banner above.
 
 ## Background reading
 

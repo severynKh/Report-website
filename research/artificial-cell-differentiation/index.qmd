@@ -1,18 +1,48 @@
 ---
 title: "Artificial Cell differentiation"
-description: "Description not written yet."
+description: "Sorting the cells of a colony into behaviour modes from their tracks alone"
 image: thumb.png
 order: 5
 half: true
 image-alt: "Cells of a colony, marked by which of two movement modes they are in"
 nocite: |
-  @ke2025inverse, @lachance2022learning
+  @ke2025inverse
 ---
 
 ::: {.hero}
 []{.hero-pic style="-webkit-mask-image:url(banner.png);mask-image:url(banner.png)"}
 :::
 
+In migrating cell colonies some cells push the colony boundary outwards while others stay in place.
+LaChance et al. found such behaviour modes by fitting one model to separate regions of a colony [@lachance2022learning].
+This project asks whether cells can be sorted one by one instead of region by region, using only the positions of the cell centres.
+
+Each cell is labelled at every time step by a hidden Markov model (HMM): a statistical model in which every cell is, at each moment, in one of a few hidden modes, and each mode has its own typical speed and turning [@langrock2012flexible].
+The model is fitted with the expectation–maximisation algorithm [@dempster1977maximum], so it creates the modes and assigns the cells to them in the same pass.
+Two modes were decoded for three colonies from the published trajectories of LaChance et al.: HUVEC, MDCK and MDA-MB-231 cells.
+
+## Results
+
+In HUVEC the two modes separate clearly.
+The second mode sits mostly on the colony edge, moves faster and turns less than the first.
+In MDCK the modes differ mainly in turning, not in position.
+MDA-MB-231, a cancer line with reportedly little self-organisation, was included for reference; its small second mode differs only in speed and turning and may be an artefact of the data.
+
+::: {layout-ncol=2}
+![One frame of the HUVEC colony, each cell coloured by its decoded mode.](figures/modes_HUVEC_colony.png)
+
+![Fraction of HUVEC cells in each mode over time.](figures/modes_HUVEC_occupancy.png)
+:::
+
+Neighbours are counted within three median nearest-cell distances.
+
+| Colony | Neighbours, mode 1 / mode 2 | Speed, mode 2 ÷ mode 1 | Mean turn per step, mode 1 / mode 2 |
+|---|---|---|---|
+| HUVEC | 11.2 / 7.8 | 1.39 | 36.1° / 24° |
+| MDCK | 12.3 and 12.6, nearly equal | 1.17 | 32.5° / 51.5° |
+| MDA-MB-231 | not reported | 4.5 | 58.5° / 109.9° |
+
+There is no ground truth to score the labels against, so these modes are a description of the data, not a verified classification.
 
 ## Background reading
 
