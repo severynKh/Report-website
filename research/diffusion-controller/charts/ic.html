@@ -1,0 +1,37 @@
+```{=html}
+<figure class="chart">
+<svg viewBox="0 0 640 318" role="img" aria-label="bar chart">
+<text class="c-tick" x="220" y="14">error of the recovered start, 20 scenes per test set (lower is better)</text>
+<line class="c-grid" x1="220.0" x2="220.0" y1="26" y2="288"/>
+<text class="c-tick" x="220.0" y="304" text-anchor="middle">0</text>
+<line class="c-grid" x1="336.7" x2="336.7" y1="26" y2="288"/>
+<text class="c-tick" x="336.7" y="304" text-anchor="middle">0.15</text>
+<line class="c-grid" x1="453.3" x2="453.3" y1="26" y2="288"/>
+<text class="c-tick" x="453.3" y="304" text-anchor="middle">0.3</text>
+<line class="c-grid" x1="570.0" x2="570.0" y1="26" y2="288"/>
+<text class="c-tick" x="570.0" y="304" text-anchor="middle">0.45</text>
+<text class="c-head" x="0" y="43">Trained on random fields</text>
+<text class="c-label" x="210" y="71.0" text-anchor="end">on random-field starts</text>
+<path class="c-bar" d="M220.0,59.0 H286.0 Q290.0,59.0 290.0,63.0 V71.0 Q290.0,75.0 286.0,75.0 H220.0 Z"><title>Trained on random fields, tested on random-field starts: 0.09</title></path>
+<text class="c-value" x="296.0" y="71.0">0.09</text>
+<text class="c-label" x="210" y="101.0" text-anchor="end">on blob starts</text>
+<path class="c-bar c-soft" d="M220.0,89.0 H521.2 Q525.2,89.0 525.2,93.0 V101.0 Q525.2,105.0 521.2,105.0 H220.0 Z"><title>Trained on random fields, tested on blob starts: 0.3924</title></path>
+<text class="c-value" x="531.2" y="101.0">0.392</text>
+<text class="c-head" x="0" y="129">Trained on blobs</text>
+<text class="c-label" x="210" y="157.0" text-anchor="end">on random-field starts</text>
+<path class="c-bar" d="M220.0,145.0 H288.5 Q292.5,145.0 292.5,149.0 V157.0 Q292.5,161.0 288.5,161.0 H220.0 Z"><title>Trained on blobs, tested on random-field starts: 0.0932</title></path>
+<text class="c-value" x="298.5" y="157.0">0.0932</text>
+<text class="c-label" x="210" y="187.0" text-anchor="end">on blob starts</text>
+<path class="c-bar c-soft" d="M220.0,175.0 H356.8 Q360.8,175.0 360.8,179.0 V187.0 Q360.8,191.0 356.8,191.0 H220.0 Z"><title>Trained on blobs, tested on blob starts: 0.181</title></path>
+<text class="c-value" x="366.8" y="187.0">0.181</text>
+<text class="c-head" x="0" y="215">Trained on both</text>
+<text class="c-label" x="210" y="243.0" text-anchor="end">on random-field starts</text>
+<path class="c-bar" d="M220.0,231.0 H293.4 Q297.4,231.0 297.4,235.0 V243.0 Q297.4,247.0 293.4,247.0 H220.0 Z"><title>Trained on both, tested on random-field starts: 0.0995</title></path>
+<text class="c-value" x="303.4" y="243.0">0.0995</text>
+<text class="c-label" x="210" y="273.0" text-anchor="end">on blob starts</text>
+<path class="c-bar c-soft" d="M220.0,261.0 H422.7 Q426.7,261.0 426.7,265.0 V273.0 Q426.7,277.0 422.7,277.0 H220.0 Z"><title>Trained on both, tested on blob starts: 0.2658</title></path>
+<text class="c-value" x="432.7" y="273.0">0.266</text>
+</svg>
+<figcaption>Early 16 × 16 study, steps 50 → 100. A blob-trained model handles random-field starts almost as well as a specialist; the reverse costs 4.3 times.</figcaption>
+</figure>
+```

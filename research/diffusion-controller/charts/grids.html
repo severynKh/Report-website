@@ -1,0 +1,48 @@
+```{=html}
+<figure class="chart">
+<svg viewBox="0 0 640 408" role="img" aria-label="bar chart">
+<text class="c-tick" x="220" y="14">median re-simulation error at step 300, 20 held-out scenes per grid (lower is better)</text>
+<line class="c-grid" x1="220.0" x2="220.0" y1="26" y2="378"/>
+<text class="c-tick" x="220.0" y="394" text-anchor="middle">0</text>
+<line class="c-grid" x1="307.5" x2="307.5" y1="26" y2="378"/>
+<text class="c-tick" x="307.5" y="394" text-anchor="middle">0.15</text>
+<line class="c-grid" x1="395.0" x2="395.0" y1="26" y2="378"/>
+<text class="c-tick" x="395.0" y="394" text-anchor="middle">0.3</text>
+<line class="c-grid" x1="482.5" x2="482.5" y1="26" y2="378"/>
+<text class="c-tick" x="482.5" y="394" text-anchor="middle">0.45</text>
+<line class="c-grid" x1="570.0" x2="570.0" y1="26" y2="378"/>
+<text class="c-tick" x="570.0" y="394" text-anchor="middle">0.6</text>
+<text class="c-head" x="0" y="43">16 × 16, 50 observed pixels</text>
+<text class="c-label" x="210" y="71.0" text-anchor="end">best of 8 guided + polish</text>
+<path class="c-bar" d="M220.0,59.0 H222.6 Q225.2,59.0 225.2,61.6 V72.4 Q225.2,75.0 222.6,75.0 H220.0 Z"><title>16 × 16: best of 8 guided + polish 0.009</title></path>
+<text class="c-value" x="231.2" y="71.0">0.009</text>
+<text class="c-label" x="210" y="101.0" text-anchor="end">best of 8 guided, no polish</text>
+<path class="c-bar c-soft" d="M220.0,89.0 H287.2 Q291.2,89.0 291.2,93.0 V101.0 Q291.2,105.0 287.2,105.0 H220.0 Z"><title>16 × 16: best of 8 guided, no polish 0.122</title></path>
+<text class="c-value" x="297.2" y="101.0">0.122</text>
+<text class="c-label" x="210" y="131.0" text-anchor="end">physics search, blobs and lines</text>
+<path class="c-bar c-soft" d="M220.0,119.0 H255.7 Q259.7,119.0 259.7,123.0 V131.0 Q259.7,135.0 255.7,135.0 H220.0 Z"><title>16 × 16: physics search with blob and line seeds 0.068</title></path>
+<text class="c-value" x="265.7" y="131.0">0.068</text>
+<text class="c-head" x="0" y="159">32 × 32, 200 observed pixels</text>
+<text class="c-label" x="210" y="187.0" text-anchor="end">best of 8 guided + polish</text>
+<path class="c-bar" d="M220.0,175.0 H224.8 Q228.8,175.0 228.8,179.0 V187.0 Q228.8,191.0 224.8,191.0 H220.0 Z"><title>32 × 32: best of 8 guided + polish 0.015</title></path>
+<text class="c-value" x="234.8" y="187.0">0.015</text>
+<text class="c-label" x="210" y="217.0" text-anchor="end">best of 8 guided, no polish</text>
+<path class="c-bar c-soft" d="M220.0,205.0 H253.9 Q257.9,205.0 257.9,209.0 V217.0 Q257.9,221.0 253.9,221.0 H220.0 Z"><title>32 × 32: best of 8 guided, no polish 0.065</title></path>
+<text class="c-value" x="263.9" y="217.0">0.065</text>
+<text class="c-label" x="210" y="247.0" text-anchor="end">physics search, blobs and lines</text>
+<path class="c-bar c-soft" d="M220.0,235.0 H344.3 Q348.3,235.0 348.3,239.0 V247.0 Q348.3,251.0 344.3,251.0 H220.0 Z"><title>32 × 32: physics search with blob and line seeds 0.22</title></path>
+<text class="c-value" x="354.3" y="247.0">0.22</text>
+<text class="c-head" x="0" y="275">64 × 64, 800 observed pixels</text>
+<text class="c-label" x="210" y="303.0" text-anchor="end">best of 8 guided + polish</text>
+<path class="c-bar" d="M220.0,291.0 H254.5 Q258.5,291.0 258.5,295.0 V303.0 Q258.5,307.0 254.5,307.0 H220.0 Z"><title>64 × 64: best of 8 guided + polish 0.066</title></path>
+<text class="c-value" x="264.5" y="303.0">0.066</text>
+<text class="c-label" x="210" y="333.0" text-anchor="end">best of 8 guided, no polish</text>
+<path class="c-bar c-soft" d="M220.0,321.0 H303.5 Q307.5,321.0 307.5,325.0 V333.0 Q307.5,337.0 303.5,337.0 H220.0 Z"><title>64 × 64: best of 8 guided, no polish 0.15</title></path>
+<text class="c-value" x="313.5" y="333.0">0.15</text>
+<text class="c-label" x="210" y="363.0" text-anchor="end">physics search, blobs and lines</text>
+<path class="c-bar c-soft" d="M220.0,351.0 H519.3 Q523.3,351.0 523.3,355.0 V363.0 Q523.3,367.0 519.3,367.0 H220.0 Z"><title>64 × 64: physics search with blob and line seeds 0.52</title></path>
+<text class="c-value" x="529.3" y="363.0">0.52</text>
+</svg>
+<figcaption>Observations scale with the grid (about 20% of the pixels). The learned prior with polish stays accurate as the grid grows; the simple-seed search does not.</figcaption>
+</figure>
+```

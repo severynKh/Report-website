@@ -254,12 +254,49 @@ def fno_64():
     write("research/fno", "grid64", svg, "64 × 64: recover an earlier state from 800 of 4,096 pixels. At 1000 steps every recovered start dies out.")
 
 
+# ------------------------------------------------------------------ diffusion controller, step 300 -> step 50
+def dc_ladder():
+    rows = [("U-Net, one guided draw", 0.562, "Plain U-Net prior, one guided draw: 0.562", False),
+            ("U²-Net, one guided draw", 0.426, "U²-Net prior, one guided draw: 0.426; 4 of 20 patterns died", False),
+            ("U²-Net, best of 8 unguided", 0.402, "Best of 8 unguided draws: 0.402", False),
+            ("lookup: best of 359 training starts", 0.128, "Best of all 359 training starts, no network: 0.128", False),
+            ("U²-Net, best of 8 guided", 0.122, "Best of 8 guided draws: 0.122", False),
+            ("one guided draw + polish", 0.016, "One guided draw + solver polish: 0.016", True),
+            ("best of 8 guided + polish", 0.009, "Best of 8 guided draws + solver polish: 0.009, none of 20 died", True)]
+    svg = grouped_hbars([("Network alone", rows[:5]), ("Network + solver polish", rows[5:])], 0.6, 0.15, "{:.3g}",
+                        "median re-simulation error at step 300, 20 held-out 16 × 16 scenes (lower is better)", label_w=220)
+    write("research/diffusion-controller", "ladder", svg,
+          "Selection and the polish, not the choice of network, carry most of the gain: 0.426 for one draw down to 0.009.")
+
+
+def dc_grids():
+    def g(name, best, b8, phys, obs):
+        return (f"{name}, {obs} observed pixels", [
+            ("best of 8 guided + polish", best, f"{name}: best of 8 guided + polish {best:g}", True),
+            ("best of 8 guided, no polish", b8, f"{name}: best of 8 guided, no polish {b8:g}", False),
+            ("physics search, blobs and lines", phys, f"{name}: physics search with blob and line seeds {phys:g}", False)])
+    svg = grouped_hbars([g("16 × 16", 0.009, 0.122, 0.068, 50), g("32 × 32", 0.015, 0.065, 0.220, 200), g("64 × 64", 0.066, 0.150, 0.520, 800)],
+                        0.6, 0.15, "{:.3g}", "median re-simulation error at step 300, 20 held-out scenes per grid (lower is better)", label_w=220)
+    write("research/diffusion-controller", "grids", svg,
+          "Observations scale with the grid (about 20% of the pixels). The learned prior with polish stays accurate as the grid grows; the simple-seed search does not.")
+
+
+def dc_ic():
+    def g(name, grf, blob):
+        return (name, [("on random-field starts", grf, f"{name}, tested on random-field starts: {grf:g}", True),
+                       ("on blob starts", blob, f"{name}, tested on blob starts: {blob:g}", False)])
+    svg = grouped_hbars([g("Trained on random fields", 0.0900, 0.3924), g("Trained on blobs", 0.0932, 0.1810), g("Trained on both", 0.0995, 0.2658)],
+                        0.45, 0.15, "{:.3g}", "error of the recovered start, 20 scenes per test set (lower is better)", label_w=220)
+    write("research/diffusion-controller", "ic", svg,
+          "Early 16 × 16 study, steps 50 → 100. A blob-trained model handles random-field starts almost as well as a specialist; the reverse costs 4.3 times.")
+
+
 if __name__ == "__main__":
     cell_modes()
     erk_frames()
-    dc_data()
-    dc_unets()
-    dc_windows()
+    dc_ladder()
+    dc_grids()
+    dc_ic()
     dc_physics()
     fno_16()
     fno_32()

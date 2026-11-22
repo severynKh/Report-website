@@ -1,6 +1,6 @@
 ---
 title: "Diffusion Controller"
-description: "A learned denoiser that finds the start of a Gray-Scott pattern"
+description: "A learned denoiser that finds a start which regrows a Gray-Scott pattern"
 image: thumb.png
 order: 3
 half: true
@@ -13,67 +13,79 @@ nocite: |
 []{.hero-pic style="-webkit-mask-image:url(banner.png);mask-image:url(banner.png)"}
 :::
 
-The Diffusion Controller looks for the initial condition that grows into a chosen Gray-Scott pattern.
-It follows DiffusionPDE [@huang2024diffusionpde]: a U-Net denoiser [@karras2022elucidating] learns what consistent pairs of early and late states look like, and a search starting from pure noise is steered towards the target late state while the denoiser keeps the pair physically plausible.
-The result is judged by the re-simulation error: the distance between the target and the state obtained by running the solver forward from the recovered start.
-Results and pictures are on [Pattern Forcing](../gray-scott-inversion/index.qmd); this page records how the model was built and where it fails.
+The task: a Gray-Scott pattern is observed at step 300 through a sparse set of pixels, and the Diffusion Controller returns a state at step 50 that grows back into it.
+The answer is judged by the re-simulation error, the distance between the observed pattern and what the solver grows from the answer.
+It is not judged by closeness to the true start: many different starts grow into the same pattern, and a simpler one is preferred over the true one.
+
+The method follows DiffusionPDE [@huang2024diffusionpde].
+A U-Net denoiser [@karras2022elucidating] learns what consistent pairs of early and late states look like.
+Starting from pure noise, a draw is steered towards the observed pixels while the denoiser keeps the pair physically plausible.
+Eight draws are made, the one that fits the observations best is kept, and a final polish runs 150 gradient steps through the solver.
+Examples are on [Pattern Forcing](../gray-scott-inversion/index.qmd).
+
+## Results
+
+On 16 × 16 grids with 50 observed pixels, the best method regrows the pattern almost exactly, and no pattern dies.
+Most of the gain comes from choosing among draws and from the polish, not from the network: a single draw is off by 0.426, and simply looking up the best of all 359 training starts already reaches 0.128.
+
+{{< include charts/ladder.html >}}
+
+The same method scales to larger grids when the number of observed pixels grows with the grid.
+
+{{< include charts/grids.html >}}
+
+The recovered start is not the true one: its error stays at 0.20–0.22 on every grid, however many pixels are observed.
+That is expected, since the observed pattern does not determine its past, and by the rule above it is not a failure.
+The patterns themselves make the past hard to see: a growing pattern first shrinks to its smallest area, around step 125, and only then spreads again.
+Placing the 49 observed pixels on a regular grid instead of at random lowered the error further, from 0.0067 to 0.0021 on 8 scenes (better on 7 of 8, p = 0.07).
 
 ## How the data were simulated
 
 The Gray-Scott model has an activator u and a substrate v.
-Training scenes were simulated on a square with no-flux boundaries, on grids of 16, 32 and 64 cells, with a spacing of 2 length units.
-Diffusion is solved exactly in a cosine basis and the reaction by an explicit step, with time step 1.218.
+Scenes were simulated on a square with no-flux boundaries and a grid spacing of 2 length units; diffusion is solved exactly in a cosine basis and the reaction by an explicit step, with time step 1.218.
+Each scene starts from a random field: u is half the positive part of a Gaussian random field and v is 1 everywhere.
+The states at steps 50 and 300 are stored, and a scene is kept only if it is still patterned at step 300, about half of them.
+The 16 × 16 model trains on 359 such scenes; the 32 × 32 and 64 × 64 models on streams of 20,000 scenes each, with U²-Nets of 3.7 and 6.0 million parameters.
 
-Each scene starts from a random field: u is half of the positive part of a Gaussian random field, and v is 1 everywhere.
-The full state (u, v) is stored at steps 50 and 100; step 0 is never shown to the model.
-A scene is kept only if it is finite and still patterned at the end.
-
-{{< include charts/data.html >}}
-
-## Why these parameters
+Parameter choices:
 
 - **Feed a = 0.02842, kill b = 0.05368.** Kept from the earlier project this one grew from; the point lies just above the fold below which no pattern survives (a > 4(a+b)², ratio 1.054).
 - **Diffusivities 0.3 for u, 1.0 for v.** The activator must diffuse more slowly than the substrate.
 - **Grid spacing 2.** A spacing of 4 pinned strokes to the grid axes; 2 matches a much finer reference within about 10%.
 - **Time step 1.218.** Set for accuracy, dt·(a+b) ≤ 0.1; the diffusion step is stable at any size.
 
-A later screen of the (a, b) plane confirmed how narrow the patterned region is: patterns survive only for a in 0.030–0.057 and b in 0.054–0.062.
+Which U-Net: on this task the U²-Net prior beat a plain U-Net (one draw 0.426 against 0.562) and was used from then on.
 
-## Which U-Nets
+## Changing the training starts
 
-The default denoiser is the DDPM++ U-Net with EDM noise conditioning, 1.7 million parameters.
-Three other U-Net designs were trained at matched size on the 16 × 16 data and scored on the same 20 held-out scenes.
+How the training starts are generated matters more than which network is used.
+An early 16 × 16 study (steps 50 to 100) trained the same model on three kinds of start: random fields, a few Gaussian blobs, or both.
 
-{{< include charts/unets.html >}}
+{{< include charts/ic.html >}}
 
-The differences between designs are smaller than the differences between scenes (interquartile range ±0.03–0.06), so the choice of U-Net matters little.
-U²-Net beat the default on the long-horizon task below and became the reference there.
+The transfer is lopsided.
+A model trained on blobs recovers random-field starts nearly as well as a specialist, because by step 50 a random field looks like many small blobs.
+A model trained on random fields cannot draw one large smooth blob, so it fails on blob starts.
+Mixing the two lost to the blob specialist on both kinds of start.
+At step 300, a U²-Net retrained on simple blob and line starts reached 0.083, no better than searching for those starts directly (0.068, below).
 
-## Where it fails: starts of settled patterns
+## Parameter fields instead of a start
 
-The method works while the pattern is still forming.
-Asked to go from a settled pattern back to its start, it fails, and more data does not help.
-
-{{< include charts/windows.html >}}
-
-The reason is that settled patterns forget where they came from.
-A single blob reaches its steady state by about step 300–400, and from then on the state stops changing.
-On the step 50 → 300 task, the different starts that all reproduce the data are as far from each other (0.251) as from the true start (0.263).
-Taking the best of 8 draws and polishing it fixes the future, a re-simulation error of 0.009, but not the past: the recovered start stays wrong.
+The same denoiser can instead return the feed, kill and diffusivity maps that grow a target from a fixed central blob.
+For drawn letters on 16 × 16 the regrown letters are recognisable but loose (re-simulation error 0.26–0.71), and the kill map takes the trivial route: it is lowered exactly where the letter should appear.
+Only the kill rate and the overall diffusion scale are identifiable from the pattern; the feed and diffusivity maps come out no better than their nominal values.
 
 ## Physics search: simpler starts without learning
 
 Physics search drops the network.
 It writes the start as a few primitives, a blob (centre, width, strength: 4 numbers) or a line (two ends, width, strength: 6 numbers), and fits them by gradient descent through the solver [@kingma2015adam; @ledimet1986variational].
 Primitives are added one at a time where the misfit is largest [@mallat1993matching; @denoyelle2020sliding].
-Simplicity is counted as the fewest numbers needed to redraw a start.
-
-On 20 held-out 16 × 16 scenes the true starts need a median of 24 numbers.
+Simplicity is counted as the fewest numbers needed to write a start; on 20 held-out 16 × 16 scenes the true starts need a median of 24.
 
 {{< include charts/physics.html >}}
 
-Physics search therefore trades accuracy for starts that are two to three times simpler than the true ones.
-It was tested only on scenes made by the simulator with uniform coefficients, and it scales badly: the blob-and-line search reaches 0.220 on 32 × 32 and 0.520 on 64 × 64, against 0.015 and 0.066 for the Diffusion Controller.
+Physics search therefore trades accuracy for starts two to three times simpler than the true ones.
+It was tested only on scenes made by the simulator with uniform coefficients, and the gap widens with the grid (see the grid chart above): simple answers cost faithfulness.
 
 ## Background reading
 
