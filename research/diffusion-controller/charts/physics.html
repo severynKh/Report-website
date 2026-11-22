@@ -1,0 +1,33 @@
+```{=html}
+<figure class="chart">
+<svg viewBox="0 0 640 276" role="img" aria-label="Simplicity against accuracy">
+<line class="c-grid" x1="70" x2="610" y1="230.0" y2="230.0"/>
+<text class="c-tick" x="62" y="234.0" text-anchor="end">0</text>
+<line class="c-grid" x1="70" x2="610" y1="180.0" y2="180.0"/>
+<text class="c-tick" x="62" y="184.0" text-anchor="end">0.03</text>
+<line class="c-grid" x1="70" x2="610" y1="130.0" y2="130.0"/>
+<text class="c-tick" x="62" y="134.0" text-anchor="end">0.06</text>
+<line class="c-grid" x1="70" x2="610" y1="80.0" y2="80.0"/>
+<text class="c-tick" x="62" y="84.0" text-anchor="end">0.09</text>
+<line class="c-grid" x1="70" x2="610" y1="30.0" y2="30.0"/>
+<text class="c-tick" x="62" y="34.0" text-anchor="end">0.12</text>
+<text class="c-tick" x="143.8" y="246" text-anchor="middle">10</text>
+<text class="c-tick" x="236.9" y="246" text-anchor="middle">24</text>
+<text class="c-tick" x="388.7" y="246" text-anchor="middle">100</text>
+<text class="c-tick" x="562.5" y="246" text-anchor="middle">512</text>
+<line class="c-ref" x1="236.9" x2="236.9" y1="30" y2="230"/>
+<text class="c-tick" x="242.9" y="40">true starts, median 24 numbers</text>
+<text class="c-tick" x="340" y="266" text-anchor="middle">numbers needed to write the start (log scale)</text>
+<text class="c-tick" x="70" y="14">re-simulation error (lower is better)</text>
+<circle class="c-dot c-m1" cx="120.0" cy="73.3" r="5"><title>Blobs: 8 numbers, error 0.094; 12 of 20 simpler and ≤ 0.1</title></circle>
+<text class="c-label" x="111.0" y="77.3" text-anchor="end">Blobs</text>
+<circle class="c-dot c-m1" cx="132.5" cy="116.7" r="5"><title>Blobs and lines: 9 numbers, error 0.068; 14 of 20 simpler and ≤ 0.1</title></circle>
+<text class="c-label" x="142.5" y="130.7" text-anchor="start">Blobs and lines</text>
+<circle class="c-dot c-m1" cx="163.2" cy="93.3" r="5"><title>Lines: 12 numbers, error 0.082; 10 of 20 simpler and ≤ 0.1</title></circle>
+<text class="c-label" x="173.2" y="97.3" text-anchor="start">Lines</text>
+<circle class="c-dot c-m2" cx="562.5" cy="215.0" r="5"><title>Diffusion Controller, pixel start: 512 numbers, error 0.009; 5 of 20 simpler and ≤ 0.1</title></circle>
+<text class="c-label" x="554.5" y="203.0" text-anchor="end">Diffusion Controller, pixel start</text>
+</svg>
+<figcaption>Physics search (left of the line) needs fewer numbers than the true starts; the Diffusion Controller is more accurate but needs 512.</figcaption>
+</figure>
+```

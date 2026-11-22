@@ -36,11 +36,7 @@ MDA-MB-231, a cancer line with reportedly little self-organisation, was included
 
 Neighbours are counted within three median nearest-cell distances.
 
-| Colony | Neighbours, mode 1 / mode 2 | Speed, mode 2 ÷ mode 1 | Mean turn per step, mode 1 / mode 2 |
-|---|---|---|---|
-| HUVEC | 11.2 / 7.8 | 1.39 | 36.1° / 24° |
-| MDCK | 12.3 and 12.6, nearly equal | 1.17 | 32.5° / 51.5° |
-| MDA-MB-231 | not reported | 4.5 | 58.5° / 109.9° |
+{{< include charts/modes.html >}}
 
 There is no ground truth to score the labels against, so these modes are a description of the data, not a verified classification.
 

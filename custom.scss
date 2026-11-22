@@ -554,3 +554,39 @@ main.content:has(.onepage) {
     font-size: 0.8rem;
   }
 }
+
+// ---------------------------------------------------------------------------
+// Charts (tools/make_charts.py): inline SVG in the theme colours.
+.chart {
+  margin: 1.5rem 0 2rem;
+
+  svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    font-family: inherit;
+  }
+
+  figcaption {
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .c-bar { fill: var(--accent); }
+  .c-soft { fill: color-mix(in srgb, var(--accent) 45%, var(--bg)); }
+  .c-grid { stroke: color-mix(in srgb, var(--fg) 12%, var(--bg)); stroke-width: 1; }
+  .c-ref { stroke: var(--muted); stroke-width: 1; }
+  .c-link { stroke: color-mix(in srgb, var(--fg) 25%, var(--bg)); stroke-width: 2; }
+  .c-dot { stroke: var(--bg); stroke-width: 2; }
+  .c-m1 { fill: var(--accent); }
+  .c-m2 { fill: var(--fg); }
+  .c-neutral { fill: var(--muted); }
+  .c-label { fill: var(--fg); font-size: 12px; }
+  .c-head { fill: var(--fg); font-size: 12px; font-weight: 600; }
+  .c-value { fill: var(--fg); font-size: 11px; }
+  .c-tick { fill: var(--muted); font-size: 11px; }
+
+  // Hover: the mark under the pointer darkens a little; its <title> shows the value.
+  .c-bar:hover, .c-dot:hover { filter: brightness(0.85); cursor: default; }
+}
