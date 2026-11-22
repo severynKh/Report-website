@@ -189,6 +189,71 @@ def dc_physics():
           "Physics search (left of the line) needs fewer numbers than the true starts; the Diffusion Controller is more accurate but needs 512.")
 
 
+# ------------------------------------------------------------------ FNO
+def grouped_hbars(groups, xmax, tick_step, fmt, note, unit="", label_w=190):
+    """groups: (heading, [(label, value, tooltip, emphasis)]). One series, grouped under headings."""
+    band, thick, head = 30, 16, 26
+    rows = sum(len(g[1]) for g in groups)
+    top = 26
+    h = top + rows * band + len(groups) * head + 34
+    plot_w = W - label_w - 70
+    sx = lambda v: label_w + v / xmax * plot_w
+    s = [svg_open(h, "bar chart")]
+    if note:
+        s.append(f'<text class="c-tick" x="{label_w}" y="14">{esc(note)}</text>')
+    bottom = h - 30
+    t = 0.0
+    while t <= xmax + 1e-9:
+        s.append(f'<line class="c-grid" x1="{sx(t):.1f}" x2="{sx(t):.1f}" y1="{top}" y2="{bottom}"/>')
+        s.append(f'<text class="c-tick" x="{sx(t):.1f}" y="{bottom + 16}" text-anchor="middle">{t:g}{unit}</text>')
+        t += tick_step
+    y = top
+    for heading, items in groups:
+        s.append(f'<text class="c-head" x="0" y="{y + 17}">{esc(heading)}</text>')
+        y += head
+        for lab, v, tip, strong in items:
+            by = y + (band - thick) / 2
+            s.append(f'<text class="c-label" x="{label_w - 10}" y="{by + thick / 2 + 4:.1f}" text-anchor="end">{esc(lab)}</text>')
+            s.append(bar(sx(0), by, v / xmax * plot_w, thick, "c-bar" if strong else "c-bar c-soft", tip))
+            s.append(f'<text class="c-value" x="{sx(v) + 6:.1f}" y="{by + thick / 2 + 4:.1f}">{fmt.format(v)}{unit}</text>')
+            y += band
+    s.append("</svg>")
+    return "\n".join(s)
+
+
+def fno_16():
+    rows = [("Diffusion, one guided draw", 0.427, "Guided U²-Net diffusion, one draw: 0.427, 4 of 20 patterns died", False),
+            ("FNO, trained on the past", 0.202, "FNO with cosine basis trained on the start state: 0.202, 2 died", False),
+            ("FNO, trained on the future", 0.108, "FNO with cosine basis trained on the re-simulated future: 0.108, 1 died", True),
+            ("Diffusion, best of 8 + polish", 0.0095, "Guided U²-Net, best of 8 draws + solver polish: 0.0095, none died", False),
+            ("FNO, 8 views + polish", 0.0038, "FNO + 8 symmetry views + solver polish: 0.0038, none died; a tie with diffusion (lower on 12 of 20, p = 0.105)", True)]
+    svg = grouped_hbars([("One pass", rows[:3]), ("With the solver polish", rows[3:])], 0.45, 0.15, "{:.4g}",
+                        "median re-simulation error at step 300, 20 held-out scenes (lower is better)")
+    write("research/fno", "grid16", svg, "16 × 16: recover the step-50 state from 50 observed pixels at step 300. Hover a bar for how many patterns died.")
+
+
+def fno_32():
+    def g(name, sup, warm, nov):
+        return (name, [("supervised", sup, f"{name}, supervised: {sup:g}% of draws", False),
+                       ("physics fit, warm start", warm, f"{name}, physics fit from the supervised weights: {warm:g}%", True),
+                       ("fit + novelty, warm start", nov, f"{name}, fit plus novelty from the supervised weights: {nov:g}%", True)])
+    svg = grouped_hbars([g("8 study shapes", 12.5, 75, 83), g("24 held-out Gray-Scott masks", 71, 96, 99), g("16 held-out drawn shapes", 12.5, 100, 97)],
+                        100, 25, "{:g}", "share of draws that reproduce the target, MCC ≥ 0.8, horizon 300 steps", unit="%")
+    write("research/fno", "grid32", svg, "32 × 32: parameter maps a, b, d from a fixed central blob. 8 draws per target.")
+
+
+def fno_64():
+    rows = [("published FNO layer", 0.4507, "Published 1×1 layer, 250 steps: 0.4507", False),
+            ("+ local 3×3 to 7×7 kernels", 0.2693, "Local kernels added, 250 steps: 0.2693", False),
+            ("+ fine-tuned on the future", 0.1683, "Local kernels, fine-tuned 4 kimg on the re-simulated future, 250 steps: 0.1683, none died", True),
+            ("local kernels", 0.8708, "500 steps: 0.8708, 16 of 40 patterns died", False),
+            ("+ future in the loss", 0.5249, "500 steps with the future in the loss: 0.5249, none died", True),
+            ("any objective tried", 1.0, "1000 steps: 1.000, all 40 patterns died", False)]
+    svg = grouped_hbars([("250 steps back", rows[:3]), ("500 steps back", rows[3:5]), ("1000 steps back", rows[5:])], 1.0, 0.25, "{:.4g}",
+                        "re-simulation error, 40 held-out scenes (lower is better)")
+    write("research/fno", "grid64", svg, "64 × 64: recover an earlier state from 800 of 4,096 pixels. At 1000 steps every recovered start dies out.")
+
+
 if __name__ == "__main__":
     cell_modes()
     erk_frames()
@@ -196,3 +261,6 @@ if __name__ == "__main__":
     dc_unets()
     dc_windows()
     dc_physics()
+    fno_16()
+    fno_32()
+    fno_64()

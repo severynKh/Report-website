@@ -1,0 +1,33 @@
+```{=html}
+<figure class="chart">
+<svg viewBox="0 0 640 262" role="img" aria-label="bar chart">
+<text class="c-tick" x="190" y="14">median re-simulation error at step 300, 20 held-out scenes (lower is better)</text>
+<line class="c-grid" x1="190.0" x2="190.0" y1="26" y2="232"/>
+<text class="c-tick" x="190.0" y="248" text-anchor="middle">0</text>
+<line class="c-grid" x1="316.7" x2="316.7" y1="26" y2="232"/>
+<text class="c-tick" x="316.7" y="248" text-anchor="middle">0.15</text>
+<line class="c-grid" x1="443.3" x2="443.3" y1="26" y2="232"/>
+<text class="c-tick" x="443.3" y="248" text-anchor="middle">0.3</text>
+<line class="c-grid" x1="570.0" x2="570.0" y1="26" y2="232"/>
+<text class="c-tick" x="570.0" y="248" text-anchor="middle">0.45</text>
+<text class="c-head" x="0" y="43">One pass</text>
+<text class="c-label" x="180" y="71.0" text-anchor="end">Diffusion, one guided draw</text>
+<path class="c-bar c-soft" d="M190.0,59.0 H546.6 Q550.6,59.0 550.6,63.0 V71.0 Q550.6,75.0 546.6,75.0 H190.0 Z"><title>Guided U²-Net diffusion, one draw: 0.427, 4 of 20 patterns died</title></path>
+<text class="c-value" x="556.6" y="71.0">0.427</text>
+<text class="c-label" x="180" y="101.0" text-anchor="end">FNO, trained on the past</text>
+<path class="c-bar c-soft" d="M190.0,89.0 H356.6 Q360.6,89.0 360.6,93.0 V101.0 Q360.6,105.0 356.6,105.0 H190.0 Z"><title>FNO with cosine basis trained on the start state: 0.202, 2 died</title></path>
+<text class="c-value" x="366.6" y="101.0">0.202</text>
+<text class="c-label" x="180" y="131.0" text-anchor="end">FNO, trained on the future</text>
+<path class="c-bar" d="M190.0,119.0 H277.2 Q281.2,119.0 281.2,123.0 V131.0 Q281.2,135.0 277.2,135.0 H190.0 Z"><title>FNO with cosine basis trained on the re-simulated future: 0.108, 1 died</title></path>
+<text class="c-value" x="287.2" y="131.0">0.108</text>
+<text class="c-head" x="0" y="159">With the solver polish</text>
+<text class="c-label" x="180" y="187.0" text-anchor="end">Diffusion, best of 8 + polish</text>
+<path class="c-bar c-soft" d="M190.0,175.0 H194.0 Q198.0,175.0 198.0,179.0 V187.0 Q198.0,191.0 194.0,191.0 H190.0 Z"><title>Guided U²-Net, best of 8 draws + solver polish: 0.0095, none died</title></path>
+<text class="c-value" x="204.0" y="187.0">0.0095</text>
+<text class="c-label" x="180" y="217.0" text-anchor="end">FNO, 8 views + polish</text>
+<path class="c-bar" d="M190.0,205.0 H191.6 Q193.2,205.0 193.2,206.6 V219.4 Q193.2,221.0 191.6,221.0 H190.0 Z"><title>FNO + 8 symmetry views + solver polish: 0.0038, none died; a tie with diffusion (lower on 12 of 20, p = 0.105)</title></path>
+<text class="c-value" x="199.2" y="217.0">0.0038</text>
+</svg>
+<figcaption>16 × 16: recover the step-50 state from 50 observed pixels at step 300. Hover a bar for how many patterns died.</figcaption>
+</figure>
+```

@@ -1,6 +1,6 @@
 ---
 title: "FNO"
-description: "In progress: a one-pass inverse for pattern-forming systems"
+description: "A one-pass inverse for Gray-Scott patterns, tested on 16, 32 and 64 pixel grids"
 image: thumb.png
 order: 2
 half: true
@@ -13,15 +13,46 @@ nocite: |
 []{.hero-pic style="-webkit-mask-image:url(banner.png);mask-image:url(banner.png)"}
 :::
 
-::: {.callout-note appearance="minimal"}
-**In progress.** This page states the goal; no results are reported here yet.
-:::
+A Fourier Neural Operator (FNO) is a network that maps one field to another by mixing information in the frequency domain [@li2021fourier].
+Here it is trained as an inverse for the Gray-Scott model: given an observed or drawn late pattern, it returns either an earlier state or the parameter fields that grow the pattern.
+It answers in a single forward pass, about 0.1 s for 20 scenes, where the [Diffusion Controller](../diffusion-controller/index.qmd) needs about 5 minutes for 8 guided draws.
 
-A Fourier Neural Operator (FNO) is a network that learns a map between whole fields, such as an initial condition and the pattern it grows into, by mixing information in the frequency domain [@li2021fourier].
+Each grid size was used for a different task, so the scores below are not comparable across grids.
+The score is the re-simulation error: the distance between the target and what the solver grows from the FNO's answer.
 
-The goal is an inverse that needs a single forward pass: given a target pattern, return the initial condition or the parameter fields that produce it.
-The [Diffusion Controller](../diffusion-controller/index.qmd) reaches the same answer only after many denoising passes, so a one-pass operator would make inverse design far cheaper.
-The intended systems are the Gray-Scott reaction–diffusion model, see [Pattern Forcing](../gray-scott-inversion/index.qmd), and a surrogate of liquid metal dealloying, whose final fields are shown in the banner above.
+## 16 × 16: an earlier state from a few pixels
+
+The FNO sees 50 pixels of the pattern at step 300 and returns the state at step 50.
+Trained on the start state alone it averages over all possible starts; trained on how well its answer re-simulates, it does much better.
+After the same solver polish as the diffusion model, the two are tied (the FNO is lower on 12 of 20 scenes).
+
+{{< include charts/grid16.html >}}
+
+On a second set of 618 tasks, an FNO and a diffusion denoiser built on the same backbone were trained side by side: the FNO solved 60% of tasks (best of 8 draws below 0.1), the denoiser 37%.
+
+## 32 × 32: parameter maps for drawn shapes
+
+From a fixed central blob, the FNO returns the feed, kill and diffusivity maps so that the pattern at step 300 matches a target shape.
+Supervised training alone works on held-out masks grown by Gray-Scott but rarely on drawn shapes.
+Continuing training through the solver, starting from the supervised weights, makes most draws succeed; MCC, the Matthews correlation between target and result, of at least 0.8 counts as success.
+
+{{< include charts/grid32.html >}}
+
+Two caveats.
+Training through the solver from random weights collapsed: every answer killed the pattern, and nothing succeeded.
+And the successful kill maps partly mirror the target shape, the trivial answer (correlation −0.54 to −0.61 with the target); the L and X shapes are never solved.
+
+## 64 × 64: further back in time
+
+The FNO sees 800 of the 4,096 pixels and returns the state 250 steps earlier.
+Adding small local kernels to the published FNO layer cut the error by 40%, and fine-tuning on the re-simulated future cut it further, with no pattern dying.
+Going further back fails: at 500 steps the error stays high, and at 1000 steps every recovered start dies out.
+
+{{< include charts/grid64.html >}}
+
+The reason is the same at every long horizon.
+A one-pass answer trained on the start state is the average of all starts that fit, which has about half the true amplitude, and a Gray-Scott pattern below its sustaining amplitude dies.
+Past about 250 steps the solver has to be part of the training objective.
 
 ## Background reading
 
