@@ -13,6 +13,10 @@ overlay: true
 []{.hero-pic .hero-over style="-webkit-mask-image:url(banner-over.png);mask-image:url(banner-over.png)"}
 :::
 
+::::: {.split}
+
+:::: {.split-left}
+
 In epithelial colonies, waves of ERK activity, a signalling molecule, steer how the cells move.
 Kikuchi et al. fitted a law that links each cell's acceleration to the ERK field and to the cell density around it [@kikuchi2025inverse].
 This project asks the reverse question: can the ERK field be recovered from the cell positions alone, without telling the model how ERK and motion are related?
@@ -21,6 +25,15 @@ The data are synthetic.
 Cell tracks were generated from the model of Kikuchi et al. in a periodic box.
 Each frame was rendered as an image of blurred nuclei: every cell is a small blob of unit mass, so the image shows where cells are but carries no ERK signal.
 A U-Net [@ronneberger2015unet], a convolutional network that maps one image to another, was trained to predict the ERK field from a short stack of these frames.
+
+## Background reading
+
+::: {#refs}
+:::
+
+::::
+
+:::: {.split-right}
 
 ## Results
 
@@ -49,7 +62,6 @@ Network: depth-3 U-Net with time stacked as input channels, 16/32/64/128 channel
 
 A field recovered this way is necessary for the observed motion, not sufficient to cause it; making a pattern happen is the subject of [Pattern Forcing](../gray-scott-inversion/index.qmd).
 
-## Background reading
+::::
 
-::: {#refs}
-:::
+:::::

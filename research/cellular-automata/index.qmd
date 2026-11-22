@@ -12,6 +12,10 @@ nocite: |
 []{.hero-pic style="-webkit-mask-image:url(banner.png);mask-image:url(banner.png)"}
 :::
 
+::::: {.split}
+
+:::: {.split-left}
+
 A cellular automaton updates every cell of a grid from its neighbours by one fixed rule.
 Differentiable Logic Cellular Automata (DiffLogic CA) learn that rule as a circuit of logic gates [@miotti2025differentiable].
 This project asks two things: can their figures be reproduced with less state per cell, and can such discrete rules learn a reaction–diffusion system, Gray-Scott, that is normally written as a PDE.
@@ -19,6 +23,15 @@ This project asks two things: can their figures be reproduced with less state pe
 A second kind of automaton runs through the project: the lattice gas.
 Each cell holds a few particles in channels, one per direction of motion; particles react inside the cell and then move to the neighbouring cells.
 Moving particles carry information between cells, so the rule itself only has to look at one cell.
+
+## Background reading
+
+::: {#refs}
+:::
+
+::::
+
+:::: {.split-right}
 
 ## Reproducing the paper with less state
 
@@ -72,7 +85,6 @@ Gray-Scott itself written as a gas stays far from the PDE at the particle counts
 For contrast, a continuous automaton with real-valued cells recovers Gray-Scott's own coefficients almost exactly (reaction R² = 0.9998).
 The obstacle is the discreteness, not the physics.
 
-## Background reading
+::::
 
-::: {#refs}
-:::
+:::::

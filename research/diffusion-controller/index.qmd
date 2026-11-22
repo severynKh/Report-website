@@ -13,6 +13,10 @@ nocite: |
 []{.hero-pic style="-webkit-mask-image:url(banner.png);mask-image:url(banner.png)"}
 :::
 
+::::: {.split}
+
+:::: {.split-left}
+
 The task: a Gray-Scott pattern is observed at step 300 through a sparse set of pixels, and the Diffusion Controller returns a state at step 50 that grows back into it.
 The answer is judged by the re-simulation error, the distance between the observed pattern and what the solver grows from the answer.
 It is not judged by closeness to the true start: many different starts grow into the same pattern, and a simpler one is preferred over the true one.
@@ -22,6 +26,15 @@ A U-Net denoiser [@karras2022elucidating] learns what consistent pairs of early 
 Starting from pure noise, a draw is steered towards the observed pixels while the denoiser keeps the pair physically plausible.
 Eight draws are made, the one that fits the observations best is kept, and a final polish runs 150 gradient steps through the solver.
 Examples are on [Pattern Forcing](../gray-scott-inversion/index.qmd).
+
+## Background reading
+
+::: {#refs}
+:::
+
+::::
+
+:::: {.split-right}
 
 ## Results
 
@@ -87,7 +100,6 @@ Simplicity is counted as the fewest numbers needed to write a start; on 20 held-
 Physics search therefore trades accuracy for starts two to three times simpler than the true ones.
 It was tested only on scenes made by the simulator with uniform coefficients, and the gap widens with the grid (see the grid chart above): simple answers cost faithfulness.
 
-## Background reading
+::::
 
-::: {#refs}
-:::
+:::::

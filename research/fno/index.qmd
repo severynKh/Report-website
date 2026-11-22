@@ -13,12 +13,25 @@ nocite: |
 []{.hero-pic style="-webkit-mask-image:url(banner.png);mask-image:url(banner.png)"}
 :::
 
+::::: {.split}
+
+:::: {.split-left}
+
 A Fourier Neural Operator (FNO) is a network that maps one field to another by mixing information in the frequency domain [@li2021fourier].
 Here it is trained as an inverse for the Gray-Scott model: given an observed or drawn late pattern, it returns either an earlier state or the parameter fields that grow the pattern.
 It answers in a single forward pass, about 0.1 s for 20 scenes, where the [Diffusion Controller](../diffusion-controller/index.qmd) needs about 5 minutes for 8 guided draws.
 
 Each grid size was used for a different task, so the scores below are not comparable across grids.
 The score is the re-simulation error: the distance between the target and what the solver grows from the FNO's answer.
+
+## Background reading
+
+::: {#refs}
+:::
+
+::::
+
+:::: {.split-right}
 
 ## 16 × 16: an earlier state from a few pixels
 
@@ -54,7 +67,6 @@ The reason is the same at every long horizon.
 A one-pass answer trained on the start state is the average of all starts that fit, which has about half the true amplitude, and a Gray-Scott pattern below its sustaining amplitude dies.
 Past about 250 steps the solver has to be part of the training objective.
 
-## Background reading
+::::
 
-::: {#refs}
-:::
+:::::
