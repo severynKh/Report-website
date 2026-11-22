@@ -291,6 +291,62 @@ def dc_ic():
           "Early 16 × 16 study, steps 50 → 100. A blob-trained model handles random-field starts almost as well as a specialist; the reverse costs 4.3 times.")
 
 
+# ------------------------------------------------------------------ cellular automata
+def ca_lizard():
+    gas = [(5, 0.304), (10, 0.456), (20, 0.649), (40, 0.808), (80, 0.825), (160, 0.817), (320, 0.810)]
+    others = [("DiffLogic CA, 8 channels", 8, 0.046), ("DiffLogic CA, 16 channels", 16, 0.520), ("gas with the book's shuffle", 40, 0.503)]
+    left, right, top, bottom = 60, W - 30, 30, 230
+    h = bottom + 46
+    lx = lambda b: left + (math.log2(b) - math.log2(4)) / (math.log2(400) - math.log2(4)) * (right - left)
+    ly = lambda v: bottom - v * (bottom - top)
+    s = [svg_open(h, "Lizard growth against state size"), legend([("c-dot c-m1", "lattice gas"), ("c-dot c-m2", "other models")], left + 150, 14)]
+    s.append(f'<text class="c-tick" x="{left}" y="14">IoU at step 12</text>')
+    for v in (0, 0.25, 0.5, 0.75, 1):
+        s.append(f'<line class="c-grid" x1="{left}" x2="{right}" y1="{ly(v):.1f}" y2="{ly(v):.1f}"/>')
+        s.append(f'<text class="c-tick" x="{left - 8}" y="{ly(v) + 4:.1f}" text-anchor="end">{v:g}</text>')
+    for b in (5, 10, 20, 40, 80, 128, 320):
+        s.append(f'<text class="c-tick" x="{lx(b):.1f}" y="{bottom + 16}" text-anchor="middle">{b}</text>')
+    s.append(f'<line class="c-ref" x1="{lx(128):.1f}" x2="{lx(128):.1f}" y1="{top}" y2="{bottom}"/>')
+    s.append(f'<text class="c-tick" x="{lx(128) + 6:.1f}" y="{bottom - 8}">paper: 128 bits, IoU not reported</text>')
+    s.append(f'<text class="c-tick" x="{(left + right) / 2:.0f}" y="{bottom + 36}" text-anchor="middle">bits of state per cell (log scale)</text>')
+    pts = " ".join(f"{lx(b):.1f},{ly(v):.1f}" for b, v in gas)
+    s.append(f'<polyline class="c-link" fill="none" points="{pts}"/>')
+    for b, v in gas:
+        s.append(f'<circle class="c-dot c-m1" cx="{lx(b):.1f}" cy="{ly(v):.1f}" r="5"><title>lattice gas, {b} bits per cell: IoU {v:g}</title></circle>')
+    s.append(f'<text class="c-label" x="{lx(80):.1f}" y="{ly(0.825) - 10:.1f}" text-anchor="middle">0.825</text>')
+    place = {"DiffLogic CA, 8 channels": (9, 4, "start"), "DiffLogic CA, 16 channels": (-9, -8, "end"), "gas with the book's shuffle": (9, 16, "start")}
+    for lab, b, v in others:
+        s.append(f'<circle class="c-dot c-m2" cx="{lx(b):.1f}" cy="{ly(v):.1f}" r="5"><title>{lab}, {b} bits per cell: IoU {v:g}</title></circle>')
+        dx, dy, anchor = place[lab]
+        s.append(f'<text class="c-label" x="{lx(b) + dx:.1f}" y="{ly(v) + dy:.1f}" text-anchor="{anchor}">{esc(lab)}</text>')
+    s.append("</svg>")
+    write("research/cellular-automata", "lizard", "\n".join(s),
+          "Growing the paper's 20 × 20 lizard in 12 steps, 701 s of CPU per run. A lattice gas with 40 bits per cell beats the logic-gate CA with 16.")
+
+
+def ca_gas_learn():
+    rows = [("deterministic, shuffle off", 0.958, "Deterministic reaction, no shuffle: bit accuracy 0.958; close statistics", True),
+            ("deterministic", 0.941, "Deterministic reaction (p = 1): bit accuracy 0.941; rollout identical to the gas", True),
+            ("deterministic, wider jumps", 0.854, "Deterministic, inhibitor jumps 3: bit accuracy 0.854; close statistics", True),
+            ("random, p = 0.9 / 0.1", 0.715, "Random reaction p = 0.9 / 0.1: bit accuracy 0.715; wrong occupancy", False),
+            ("random, p = 0.4, shuffle off", 0.738, "Random reaction p = 0.4, no shuffle: bit accuracy 0.738; fails", False),
+            ("random, p = 0.4", 0.605, "Random reaction p = 0.4: bit accuracy 0.605; pattern dies", False)]
+    svg = grouped_hbars([("Reproduces the gas", rows[:3]), ("Fails", rows[3:])], 1.0, 0.25, "{:.3g}",
+                        "bit accuracy of the learned circuit on the gas rule", label_w=220)
+    write("research/cellular-automata", "gaslearn", svg, "A logic-gate CA learns the lattice-gas rule only when the reaction is deterministic.")
+
+
+def ca_gs_recall():
+    def g(name, a, b, c):
+        return (name, [("1 bit, radius 1", a, f"{name}, 1 bit, radius 1: {a:g}", False),
+                       ("1 bit, radius 3, held out", b, f"{name}, 1 bit, radius 3, held-out: {b:g}", False),
+                       ("4 bits, radius 1, held out", c, f"{name}, 4 bits per cell, radius 1, held-out: {c:g}", True)])
+    svg = grouped_hbars([g("Labyrinth", 0.004, 0.042, 0.446), g("Mitosis", 0.006, 0.031, 0.503), g("Spots", 0.000, 0.033, 0.481), g("Stripes", 0.000, 0.021, 0.460)],
+                        0.6, 0.15, "{:.3g}", "change recall: share of flipping cells the best possible rule predicts", label_w=220)
+    write("research/cellular-automata", "gsrecall", svg,
+          "Binarised Gray-Scott is not a radius-1 cellular automaton. A wider neighbourhood barely helps; more bits per cell do.")
+
+
 if __name__ == "__main__":
     cell_modes()
     erk_frames()
@@ -301,3 +357,6 @@ if __name__ == "__main__":
     fno_16()
     fno_32()
     fno_64()
+    ca_lizard()
+    ca_gas_learn()
+    ca_gs_recall()

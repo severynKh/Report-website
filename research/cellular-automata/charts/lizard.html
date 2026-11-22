@@ -1,0 +1,47 @@
+```{=html}
+<figure class="chart">
+<svg viewBox="0 0 640 276" role="img" aria-label="Lizard growth against state size">
+<circle class="c-dot c-m1" cx="215" cy="10" r="5"/>
+<text class="c-label" x="225" y="14">lattice gas</text>
+<circle class="c-dot c-m2" cx="318.2" cy="10" r="5"/>
+<text class="c-label" x="328.2" y="14">other models</text>
+<text class="c-tick" x="60" y="14">IoU at step 12</text>
+<line class="c-grid" x1="60" x2="610" y1="230.0" y2="230.0"/>
+<text class="c-tick" x="52" y="234.0" text-anchor="end">0</text>
+<line class="c-grid" x1="60" x2="610" y1="180.0" y2="180.0"/>
+<text class="c-tick" x="52" y="184.0" text-anchor="end">0.25</text>
+<line class="c-grid" x1="60" x2="610" y1="130.0" y2="130.0"/>
+<text class="c-tick" x="52" y="134.0" text-anchor="end">0.5</text>
+<line class="c-grid" x1="60" x2="610" y1="80.0" y2="80.0"/>
+<text class="c-tick" x="52" y="84.0" text-anchor="end">0.75</text>
+<line class="c-grid" x1="60" x2="610" y1="30.0" y2="30.0"/>
+<text class="c-tick" x="52" y="34.0" text-anchor="end">1</text>
+<text class="c-tick" x="86.7" y="246" text-anchor="middle">5</text>
+<text class="c-tick" x="169.4" y="246" text-anchor="middle">10</text>
+<text class="c-tick" x="252.2" y="246" text-anchor="middle">20</text>
+<text class="c-tick" x="335.0" y="246" text-anchor="middle">40</text>
+<text class="c-tick" x="417.8" y="246" text-anchor="middle">80</text>
+<text class="c-tick" x="473.9" y="246" text-anchor="middle">128</text>
+<text class="c-tick" x="583.3" y="246" text-anchor="middle">320</text>
+<line class="c-ref" x1="473.9" x2="473.9" y1="30" y2="230"/>
+<text class="c-tick" x="479.9" y="222">paper: 128 bits, IoU not reported</text>
+<text class="c-tick" x="335" y="266" text-anchor="middle">bits of state per cell (log scale)</text>
+<polyline class="c-link" fill="none" points="86.7,169.2 169.4,138.8 252.2,100.2 335.0,68.4 417.8,65.0 500.6,66.6 583.3,68.0"/>
+<circle class="c-dot c-m1" cx="86.7" cy="169.2" r="5"><title>lattice gas, 5 bits per cell: IoU 0.304</title></circle>
+<circle class="c-dot c-m1" cx="169.4" cy="138.8" r="5"><title>lattice gas, 10 bits per cell: IoU 0.456</title></circle>
+<circle class="c-dot c-m1" cx="252.2" cy="100.2" r="5"><title>lattice gas, 20 bits per cell: IoU 0.649</title></circle>
+<circle class="c-dot c-m1" cx="335.0" cy="68.4" r="5"><title>lattice gas, 40 bits per cell: IoU 0.808</title></circle>
+<circle class="c-dot c-m1" cx="417.8" cy="65.0" r="5"><title>lattice gas, 80 bits per cell: IoU 0.825</title></circle>
+<circle class="c-dot c-m1" cx="500.6" cy="66.6" r="5"><title>lattice gas, 160 bits per cell: IoU 0.817</title></circle>
+<circle class="c-dot c-m1" cx="583.3" cy="68.0" r="5"><title>lattice gas, 320 bits per cell: IoU 0.81</title></circle>
+<text class="c-label" x="417.8" y="55.0" text-anchor="middle">0.825</text>
+<circle class="c-dot c-m2" cx="142.8" cy="220.8" r="5"><title>DiffLogic CA, 8 channels, 8 bits per cell: IoU 0.046</title></circle>
+<text class="c-label" x="151.8" y="224.8" text-anchor="start">DiffLogic CA, 8 channels</text>
+<circle class="c-dot c-m2" cx="225.6" cy="126.0" r="5"><title>DiffLogic CA, 16 channels, 16 bits per cell: IoU 0.52</title></circle>
+<text class="c-label" x="216.6" y="118.0" text-anchor="end">DiffLogic CA, 16 channels</text>
+<circle class="c-dot c-m2" cx="335.0" cy="129.4" r="5"><title>gas with the book's shuffle, 40 bits per cell: IoU 0.503</title></circle>
+<text class="c-label" x="344.0" y="145.4" text-anchor="start">gas with the book&#x27;s shuffle</text>
+</svg>
+<figcaption>Growing the paper&#x27;s 20 × 20 lizard in 12 steps, 701 s of CPU per run. A lattice gas with 40 bits per cell beats the logic-gate CA with 16.</figcaption>
+</figure>
+```
